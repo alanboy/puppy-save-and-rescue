@@ -77,13 +77,18 @@ export const getPets = ((async (event) => {
  **/
 export const getPetById = ((async (event) => {
     // Initialize the DB
+
+    let ownerId : Number = 0
+    if (event.pathParameters != undefined) {
+        ownerId = Number(event.pathParameters.id)
+    }
     let db = await init();
 
     // Prepare an sql statement
     const stmt = db.prepare("SELECT * FROM pets WHERE id=:id ");
 
     // Bind values to the parameters and fetch the results of the query
-    const result = stmt.getAsObject({':id' : 1});
+    const result = stmt.getAsObject({':id' : ownerId});
 
     return { statusCode: 200, body: JSON.stringify(result) }
 }))
